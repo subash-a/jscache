@@ -4,12 +4,14 @@ function Cache () {
     table = {},
     size = 0,
     max_size = 0,
-    cache_obj = Object.create({"size":0,"data":{}}),
+    min_fetched = 0,
+    cache_obj = Object.create({"size":0,"data":{},"fetched":1}),
     clearCache = function () {
 	table = [];
     },
     checkCache = function(id,callback) {
 	if(table[id]) {
+	    table[id].fetched ++;
 	    callback(table[id].data);
 	}
 	else {
@@ -23,7 +25,7 @@ function Cache () {
 	table[id].data = obj;
 	return CACHE;
     },
-    getSize = function(list) {
+    getSize = function(obj) {
 	var s = 0,
 	checkSize = function(o){
 	    switch (typeof o) {
@@ -41,8 +43,8 @@ function Cache () {
 		break;
 	    };
 	};
-	for(var x in list) {
-	    checkSize(list[x])
+	for(var x in obj) {
+	    checkSize(obj[x])
 	}
 	return s;
     },
@@ -64,15 +66,38 @@ function Cache () {
 	xhr.open("GET",id,true);
 	xhr.onreadystatechange = function () {
 	    if(xhr.readyState === 4) {
-		table[id] = Object.create(cache_obj);
-		table[id].data = JSON.parse(xhr.responseText);
-		table[id].size = getCacheObjectSize(id);
-		size += table[id].size;
-		callback(table[id].data);
-		}
-	    };
+		var data = JSON.parse(xhr.responseText);
+		var obj = addCacheObject(id,data);
+		callback(obj);
+	    }
+	}
 	xhr.send();
-	};
+    },
+    removeCacheObject = function(id) {
+	delete table[id];
+    },
+    addCacheObject = function (id,data) {
+	var cacheObject = {"size":0,"data":{},"fetched":1};
+	cacheObject.data = data;
+	cacheObject.size = getSize(cacheObject);
+	if((size + cacheObject.size) > max_size) {
+	    var overflow = max_size - (size + cacheObject.size);
+	    console.log("Cache Size will be exceeded by: " + Math.abs(overflow) + " Bytes");
+	    removeLeastUsed(cacheObject.size);
+	}
+	size += cacheObject.size;
+	min_fetched = min_fetched > cacheObject.fetched ? min_fetched : cacheObject.fetched;
+	table[id] = cacheObject;
+	return cacheObject;
+    },
+    removeLeastUsed = function (o_size) {
+	for(var o in table) {
+	    if(table[o].fetched < min_fetched) {
+		size -= table[o].size;
+		removeCacheObject(o);
+	    }
+	}
+    };
 	
     //=====================================================================
     //         Setting public variables and methods
