@@ -5,6 +5,8 @@ function Cache () {
     //===================================================================
     var CACHE = {},
     table = {},
+    queue = [],
+    callback_queue = {},
     size = 0,
     maxCacheSize = 0,
     minFetched = 0,
@@ -25,12 +27,18 @@ function Cache () {
 	    callback(table[id].data);
 	}
 	else {
-	    cacheMisses ++;
-	    getObject(id,callback);
+	    if(!callback_queue[id]) {
+		callback_queue[id] = [];
+		cacheMisses ++;
+		getObject(id,callback);
+	    }
+	    else {
+		callback_queue[id].push(callback); 
+	    }
 	}
     },
     getCacheObject = function (id,callback) {
-	return checkCache(id,callback);
+	    return checkCache(id,callback);
     },
     setCacheObject = function (id,obj) {
 	table[id].data = obj;
@@ -75,6 +83,9 @@ function Cache () {
 	maxCacheSize = sz;
 	return CACHE;
     },
+    executeCallbackQueue = function(id) {
+	
+    },
     getObject = function (id,callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET",id,true);
@@ -83,6 +94,13 @@ function Cache () {
 		var data = JSON.parse(xhr.responseText);
 		var obj = addCacheObject(id,data);
 		callback(obj);
+		if(callback_queue[id].length) { 
+		    callback_queue[id].map(function(f){
+			cacheHits ++;
+			table[id].fetched ++;
+			f.apply(this,obj)
+		    });
+		}
 	    }
 	}
 	xhr.send();
