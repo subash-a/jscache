@@ -1,20 +1,31 @@
 function Cache () {
     'use strict';
+    //===================================================================
+    //                 Variable Declarations and Initializations
+    //===================================================================
     var CACHE = {},
     table = {},
     size = 0,
-    max_size = 0,
-    min_fetched = 0,
-    cache_obj = Object.create({"size":0,"data":{},"fetched":1}),
-    clearCache = function () {
+    maxCacheSize = 0,
+    minFetched = 0,
+    cacheMisses = 0,
+    cacheHits = 0,
+    cache_obj = Object.create({"size":0,"data":{},"fetched":1});
+    
+    //=======================================================================
+    //         Method Declarations and Definitions
+    //======================================================================
+    var clearCache = function () {
 	table = [];
     },
     checkCache = function(id,callback) {
 	if(table[id]) {
 	    table[id].fetched ++;
+	    cacheHits ++;
 	    callback(table[id].data);
 	}
 	else {
+	    cacheMisses ++;
 	    getObject(id,callback);
 	}
     },
@@ -26,27 +37,27 @@ function Cache () {
 	return CACHE;
     },
     getSize = function(obj) {
-	var s = 0,
+	var sum = 0,
 	checkSize = function(o){
 	    switch (typeof o) {
-	    case 'string': s += o.length * 2;
+	    case 'string': sum += o.length * 2;
 		break;
-	    case 'number': s += 8;
+	    case 'number': sum += 8;
 		break;
-	    case 'boolean': s += 4;
+	    case 'boolean': sum += 4;
 		break;
 	    case 'object': for(var c in o){
 		checkSize(o[c]);
 	    };
 		break;
-	    default : s += 1;
+	    default : sum += 1;
 		break;
 	    };
 	};
 	for(var x in obj) {
 	    checkSize(obj[x])
 	}
-	return s;
+	return sum;
     },
     calculateSize = function (obj) {
 	return getSize(obj);
@@ -57,8 +68,11 @@ function Cache () {
     getCacheSize = function () {
 	return size;
     },
-    setMaximumCacheSize = function (s) {
-	max_size = s;
+    getStats = function () {
+	return {"items":Object.keys(table).length,"minimum_fetched":minFetched,"cache_size":size,"cache_miss":cacheMisses,"cache_hits":cacheHits};
+    },
+    setMaximumCacheSize = function (sz) {
+	maxCacheSize = sz;
 	return CACHE;
     },
     getObject = function (id,callback) {
@@ -75,24 +89,25 @@ function Cache () {
     },
     removeCacheObject = function(id) {
 	delete table[id];
+	console.log("removed cache object",id);
     },
     addCacheObject = function (id,data) {
 	var cacheObject = {"size":0,"data":{},"fetched":1};
 	cacheObject.data = data;
 	cacheObject.size = getSize(cacheObject);
-	if((size + cacheObject.size) > max_size) {
-	    var overflow = max_size - (size + cacheObject.size);
+	if((size + cacheObject.size) > maxCacheSize) {
+	    var overflow = maxCacheSize - (size + cacheObject.size);
 	    console.log("Cache Size will be exceeded by: " + Math.abs(overflow) + " Bytes");
 	    removeLeastUsed(cacheObject.size);
 	}
 	size += cacheObject.size;
-	min_fetched = min_fetched > cacheObject.fetched ? min_fetched : cacheObject.fetched;
+	minFetched = minFetched > cacheObject.fetched ? minFetched : cacheObject.fetched;
 	table[id] = cacheObject;
 	return cacheObject;
     },
     removeLeastUsed = function (o_size) {
 	for(var o in table) {
-	    if(table[o].fetched < min_fetched) {
+	    if(table[o].fetched <= minFetched) {
 		size -= table[o].size;
 		removeCacheObject(o);
 	    }
@@ -102,8 +117,9 @@ function Cache () {
     //=====================================================================
     //         Setting public variables and methods
     //====================================================================
-    CACHE.maxSize = max_size;
+    CACHE.maxSize = maxCacheSize;
     
+    CACHE.getStats = getStats;
     CACHE.clearCache = clearCache;
     CACHE.getCacheObject = getCacheObject;
     CACHE.setCacheObject = setCacheObject;
