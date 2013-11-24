@@ -4,34 +4,23 @@ function Cache () {
     table = {},
     size = 0,
     max_size = 0,
-    cache_obj = {},
+    cache_obj = Object.create({"size":0,"data":{}}),
     clearCache = function () {
 	table = [];
     },
     checkCache = function(id,callback) {
 	if(table[id]) {
-	    callback(table[id]);
+	    callback(table[id].data);
 	}
 	else {
-	    table[id] = getObject(id,callback);
+	    getObject(id,callback);
 	}
     },
     getCacheObject = function (id,callback) {
 	return checkCache(id,callback);
     },
     setCacheObject = function (id,obj) {
-	table[id] = obj;
-	return CACHE;
-    },
-    calculateSize = function () {
-	size = getSize(table);
-    },
-    getCacheSize = function () {
-	calculateSize();
-	return size;
-    },
-    setMaximumCacheSize = function (s) {
-	max_size = s;
+	table[id].data = obj;
 	return CACHE;
     },
     getSize = function(list) {
@@ -57,26 +46,45 @@ function Cache () {
 	}
 	return s;
     },
+    calculateSize = function (obj) {
+	return getSize(obj);
+    },
+    getCacheObjectSize = function (id) {
+	return calculateSize(table[id].data);
+    },
+    getCacheSize = function () {
+	return size;
+    },
+    setMaximumCacheSize = function (s) {
+	max_size = s;
+	return CACHE;
+    },
     getObject = function (id,callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET",id,true);
 	xhr.onreadystatechange = function () {
 	    if(xhr.readyState === 4) {
-		table[id] = JSON.parse(xhr.responseText);
-		callback(table[id]);
-	    }
-	};
+		table[id] = Object.create(cache_obj);
+		table[id].data = JSON.parse(xhr.responseText);
+		table[id].size = getCacheObjectSize(id);
+		size += table[id].size;
+		callback(table[id].data);
+		}
+	    };
 	xhr.send();
-    };
-    
+	};
+	
     //=====================================================================
     //         Setting public variables and methods
     //====================================================================
+    CACHE.maxSize = max_size;
+    
     CACHE.clearCache = clearCache;
     CACHE.getCacheObject = getCacheObject;
     CACHE.setCacheObject = setCacheObject;
     CACHE.getCacheSize = getCacheSize;
     CACHE.setMaximumCacheSize = setMaximumCacheSize;
+    
     return CACHE;
 }
  
