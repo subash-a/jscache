@@ -318,6 +318,54 @@ This replacement algorithm reoves the biggest cache object to make way for many 
 	    obj_id = o;
 	}
 	removeCacheObject(obj_id);
+    },
+    //===================================================================
+    //     This feature can be used when parts of data needs to be fetched like pagination
+    //==================================================================
+    chunkData = function (urltemplate,keyarray,objectname,interval) {
+	var template = urltemplate,
+	keys = keyarray,
+	obj_id = objectname,
+	fetchChunk = function (key) {
+	    var url = template+key,
+	    resCallback = function (data) {
+		addCacheChunkObject(obj_id,data);
+	    };
+	    fetchCacheChunkObject(url,resCallback)
+	};
+	keys.map(fetchChunk)
+    };
+
+    fetchCacheChunkObject = function (url,callback) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET",url,true);
+	xhr.onreadystatechange = function () {
+	    if(xhr.readyState === 4) {
+		var data = JSON.parse(xhr.responseText);
+		callback(data);
+	    }
+	};
+    };
+
+    addCacheChunkObject = function (id,data) {
+	if(!table[id]) {
+	    var cacheObject = {"size":0,"data":{},"fetched":1,"last_fetched":Date.parse(new Date())};
+	    cacheObject.data = data;
+	    cacheObject.size = getSize(cacheObject);
+	    if((size + cacheObject.size) > maxCacheSize) {
+		var overflow = maxCacheSize - (size + cacheObject.size);
+		if(log){console.warn("Cache Size will be exceeded by: " + Math.abs(overflow) + " Bytes")}
+		//removeLeastFetched(cacheObject.size);
+	    }
+	    size += cacheObject.size;
+	    minFetched = minFetched > cacheObject.fetched ? minFetched : cacheObject.fetched;
+	    table[id] = cacheObject;
+	    return cacheObject;
+	}
+	else {
+	    var object = table[id];
+	    object[0].push(data);
+	}
     };
 	
     //=====================================================================
