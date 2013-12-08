@@ -4,6 +4,9 @@ module.exports = function(grunt) {
 	jshint:{
 	    files:['./cache.js'],
 	    options:{
+		eqeqeq:true,
+		curly:true,
+		smarttabs:true,
 		ignores:['./app.js,./Gruntfile.js']
 	    }
 	},

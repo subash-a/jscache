@@ -49,20 +49,20 @@ Method is used for checking the cache and firing a ajax call if the data for tha
 **/
     checkCache = function(id,callback) {
 	if(table[id]) {
-	    if(log){console.log("Data found in Cache Table")}
+	    if(log){console.log("Data found in Cache Table");}
 	    cacheHits ++;
 	    updateCacheObjectFlags(id);
 	    callback(table[id].data);
 	}
 	else {
-	    if(log){console.log("Data not found in Cache Table")}
+	    if(log){console.log("Data not found in Cache Table");}
 	    if(!callback_queue[id]) {
 		callback_queue[id] = [];
 		cacheMisses ++;
 		getObject(id,callback);
 	    }
 	    else {
-		if(log){console.log("Pushing request into Callback Queue")}
+		if(log){console.log("Pushing request into Callback Queue");}
 		callback_queue[id].push(callback); 
 	    }
 	}
@@ -74,7 +74,7 @@ This method is used for updating cache object flags or statistics so that when t
 @param {String} id is the hash id of the cacheObject (URL and params)
 **/
     updateCacheObjectFlags = function(id) {
-	if(log){console.log("Updating Cache Object flags")}
+	if(log){console.log("Updating Cache Object flags");}
 	table[id].fetched ++;
 	table[id].last_fetched = Date.parse(new Date());
     },
@@ -86,7 +86,7 @@ Method is used for fetching cache object and calls another function internally c
 @return {Function} checkCache which executes the callback with cacheObject
 **/
     getCacheObject = function (id,callback) {
-	if(log){console.log("Checking for requested Cache Object")}
+	if(log){console.log("Checking for requested Cache Object");}
 	    return checkCache(id,callback);
     },
 /**
@@ -98,7 +98,7 @@ The method is used primarily to set a cacheObject manually if one does not want 
 @return {Object} CACHE is the cache instance which is being set with data.
 **/
     setCacheObject = function (id,obj) {
-	if(log){console.log("Setting Cache Object through manual feed")}
+	if(log){console.log("Setting Cache Object through manual feed");}
 	table[id].data = obj;
 	return CACHE;
     },
@@ -110,7 +110,7 @@ This method is used for calculating the approximate size of the cache object as 
 @return {Number} s is the size of the object in Bytes
 **/
     getSize = function(obj) {
-	var sum = 0,
+	var sum = 0, x,
 	checkSize = function(o){
 	    switch (typeof o) {
 	    case 'string': sum += o.length * 2;
@@ -125,10 +125,10 @@ This method is used for calculating the approximate size of the cache object as 
 		break;
 	    default : sum += 1;
 		break;
-	    };
+	    }
 	};
-	for(var x in obj) {
-	    checkSize(obj[x])
+	for(x in obj) {
+	    checkSize(obj[x]);
 	}
 	return sum;
     },
@@ -140,7 +140,7 @@ This method is used for calculating the approximate size of the cache object as 
 @return {Function} getSize which returns the size of the object passed to it
 **/
     calculateSize = function (obj) {
-	if(log){console.log("Calculating Size of the Object")}
+	if(log){console.log("Calculating Size of the Object");}
 	return getSize(obj);
     },
 /**
@@ -188,7 +188,7 @@ This method is used for setting the maximum cache size in bytes that can be used
 @return {Object} CACHE is the instance of this object
 **/
     setMaximumCacheSize = function (sz) {
-	if(log){console.log("Setting Maximum Cache Size")}
+	if(log){console.log("Setting Maximum Cache Size");}
 	maxCacheSize = sz;
 	return CACHE;
     },
@@ -203,7 +203,7 @@ Method is used for fetching the required data from the backend or a web service 
 @param {Function} callback is a callback function which gets executed once data is available
 **/
     getObject = function (id,callback) {
-	if(log){console.log("Sending AJAX request to fetch requested data")}
+	if(log){console.log("Sending AJAX request to fetch requested data");}
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET",id,true);
 	xhr.onreadystatechange = function () {
@@ -212,7 +212,7 @@ Method is used for fetching the required data from the backend or a web service 
 		var obj = addCacheObject(id,data);
 		callback(obj);
 		if(callback_queue[id].length) { 
-		    if(log){console.log("Starting execution of callback queue")}
+		    if(log){console.log("Starting execution of callback queue");}
 		    callback_queue[id].map(function(f){
 			cacheHits ++;
 			updateCacheObjectFlags(id);
@@ -220,7 +220,7 @@ Method is used for fetching the required data from the backend or a web service 
 		    });
 		}
 	    }
-	}
+	};
 	xhr.send();
     },
 /**
@@ -230,7 +230,7 @@ Method is used for fetching the required data from the backend or a web service 
 @param {String} id is the hash id of the cacheObject (URL with params)
 **/
     removeCacheObject = function(id) {
-	if(log){console.log("Removing Cache Object id: ",id)}
+	if(log){console.log("Removing Cache Object id: ",id);}
 	size -= table[id].size;
 	delete table[id];
 	
@@ -244,13 +244,13 @@ Method is used for fetching the required data from the backend or a web service 
 @return {Object} cacheObject is the fully formed object that contains flag data and the ajax data.
 **/
     addCacheObject = function (id,data) {
-	if(log){console.log("Adding new cache object to the Cache Table")}
+	if(log){console.log("Adding new cache object to the Cache Table");}
 	var cacheObject = {"size":0,"data":{},"fetched":1,"last_fetched":Date.parse(new Date())};
 	cacheObject.data = data;
 	cacheObject.size = getSize(cacheObject);
 	if((size + cacheObject.size) > maxCacheSize) {
 	    var overflow = maxCacheSize - (size + cacheObject.size);
-	    if(log){console.warn("Cache Size will be exceeded by: " + Math.abs(overflow) + " Bytes")}
+	    if(log){console.warn("Cache Size will be exceeded by: " + Math.abs(overflow) + " Bytes");}
 	    //removeLeastFetched(cacheObject.size);
 	}
 	size += cacheObject.size;
@@ -265,7 +265,7 @@ This is a Object replacement algorithm that removes any object that has been fet
 @param {Number} o_size is the size of the object that needs to be added to cache so that replacement of one or more cache objects can be carried out till the required size is freed in the cache
 **/
     removeLeastFetched = function (o_size) {
-	if(log){console.log("Calling remove least fetched algoritm")}
+	if(log){console.log("Calling remove least fetched algoritm");}
 	var obj_id,
 	min_fetch = minFetched;
 	for(var o in table) {
@@ -284,7 +284,7 @@ This Cache Object replacement algorithm replaces objects by criterion as to whic
 @param {Number} o_size is the size of the object that needs to be added to the cache
 **/
     removeLeastUsed = function (o_size) {
-	if(log){console.log("calling remove least used algorithm")}
+	if(log){console.log("calling remove least used algorithm");}
 	var obj_id,
 	rare_fetch = Date.parse(new Date());
 	for(var o in table) {
@@ -302,7 +302,7 @@ This replacement algorithm reoves the biggest cache object to make way for many 
 @param {Number} o_size is the size of the object that needs to be added into the cache.
 **/
     removeBiggest = function (o_size) {
-	if(log){console.log("calling remove biggest algorithm")}
+	if(log){console.log("calling remove biggest algorithm");}
 	var obj_id,
 	biggest_size = 0;
 	for(var o in table) {
@@ -315,7 +315,7 @@ This replacement algorithm reoves the biggest cache object to make way for many 
     },
 
     removeSmallest = function (o_size) {
-	if(log){console.log("calling remove smallest algorithm")}
+	if(log){console.log("calling remove smallest algorithm");}
 	var obj_id,
 	smallest_size = Infinity;
 	if(table[o].size < smallest_size) {
@@ -375,9 +375,9 @@ The function is intended for fetching and adding the chunked cache object into t
 		var obj = addCacheChunkObject(obj_id,data,path);
 		callback(obj);
 	    };
-	    fetchCacheChunkObject(url,resCallback)
+	    fetchCacheChunkObject(url,resCallback);
 	};
-	keys.map(fetchChunk)
+	keys.map(fetchChunk);
     },
 /**
 This method makes the xhr call and upon receiving of data executes a callback that involves adding the cache object to the cache table after calculating the size of the object and optionaly executing a replacement algorithm
@@ -406,13 +406,13 @@ The method is used for adding the cache object into the table depending on the s
 @param {String} path is the object key which is where the new data gets added after successive calls are made to the chunked object
 **/
     addCacheChunkObject = function (id,data,path) {
+	var cacheObject = {"size":0,"data":{},"fetched":1,"last_fetched":Date.parse(new Date())};
 	if(!table[id]) {
-	    var cacheObject = {"size":0,"data":{},"fetched":1,"last_fetched":Date.parse(new Date())};
 	    cacheObject.data = data;
 	    cacheObject.size = getSize(cacheObject);
 	    if((size + cacheObject.size) > maxCacheSize) {
 		var overflow = maxCacheSize - (size + cacheObject.size);
-		if(log){console.warn("Cache Size will be exceeded by: " + Math.abs(overflow) + " Bytes")}
+		if(log){console.warn("Cache Size will be exceeded by: " + Math.abs(overflow) + " Bytes");}
 		//removeLeastFetched(cacheObject.size);
 	    }
 	    size += cacheObject.size;
@@ -421,7 +421,7 @@ The method is used for adding the cache object into the table depending on the s
 	    return cacheObject;
 	}
 	else {
-	    var cacheObject = table[id];
+	    cacheObject = table[id];
 	    cacheObject.data[path] = cacheObject.data[path].concat(data[path]);
 	    return cacheObject;
 	}
