@@ -187,8 +187,8 @@ This method is used for setting the maximum cache size in bytes that can be used
 	maxCacheSize = sz;
 	return CACHE;
     },
+
     executeCallbackQueue = function(id) {
-	
     },
 /**
 Method is used for fetching the required data from the backend or a web service using AJAX call and is then used for executing the callback passed to the cacheObject, it also executes the callbacks which have been queued after the ajax call was made and before it returned with the data.
@@ -322,6 +322,19 @@ This replacement algorithm reoves the biggest cache object to make way for many 
     //===================================================================
     //     This feature can be used when parts of data needs to be fetched like pagination
     //==================================================================
+/**
+The method is used for fetching the chunked cache object by checking for its existence and executing the callback when the data is returned to the function.
+
+@method getChunkedCacheObject
+@param {String} id is the id used for storing the cache object, this may be different from the actual url that will be called.
+@param {Function} callback is the function that is executed when the cacheobject returns.
+@param {Object} options configuration object
+@param {String} options.urltemplate is the url template that has a value tag that gets replaced with the keys
+@param {Array} options.keyarray is the array of keys that need to be replaced in the template when making the url call
+@param {Number} options.interval is the interval after which the next call needs to be made
+@param {String} options.path is the path which needs to be used for mxing the incoming data with existing data
+
+**/
     getChunkedCacheObject = function(id,callback,options) {
 	if(table[id]) {
 	    return table[id];
@@ -336,6 +349,17 @@ This replacement algorithm reoves the biggest cache object to make way for many 
 	    }
 	}
     },
+/**
+The function is intended for fetching and adding the chunked cache object into the cache table and also executes the callback given upon addition of object in the table
+
+@method chunkData
+@param {String} urltemplate is the string template having value surrounded by braces which is replaced by the keys when the url call is being made
+@param {Array} is the array of keys that get attached to the urltemplate when the xhr is being made
+@param {String} objectname is the string id for the cache table object that is going to be stored
+@param {Number} interval is the time interval after which the next xhr call needs to be made
+@param {String} path is the string path for the object where the new objects needs to be added to the existing cache object
+@param {Function} callback is the callback to be executed when the cacheobject gets added to the cache table
+**/
     chunkData = function (urltemplate,keyarray,objectname,interval,path,callback) {
 	var template = urltemplate,
 	keys = keyarray,
@@ -350,7 +374,13 @@ This replacement algorithm reoves the biggest cache object to make way for many 
 	};
 	keys.map(fetchChunk)
     },
+/**
+This method makes the xhr call and upon receiving of data executes a callback that involves adding the cache object to the cache table after calculating the size of the object and optionaly executing a replacement algorithm
 
+@method fetchCacheChunkObject
+@param {String} url is the URL to be called for the required object
+@param {Function} callback which is supposed to be executed after getting the object
+**/
     fetchCacheChunkObject = function (url,callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET",url,true);
@@ -362,7 +392,14 @@ This replacement algorithm reoves the biggest cache object to make way for many 
 	};
 	xhr.send();
     },
+/**
+The method is used for adding the cache object into the table depending on the size and other conditions where the object might exceed the max cache size set by user
 
+@method addCacheChunkObject
+@param {String} id is the is of the cache table object
+@param {Object} data is the object that is content of the cache object
+@param {String} path is the object key which is where the new data gets added after successive calls are made to the chunked object
+**/
     addCacheChunkObject = function (id,data,path) {
 	if(!table[id]) {
 	    var cacheObject = {"size":0,"data":{},"fetched":1,"last_fetched":Date.parse(new Date())};
