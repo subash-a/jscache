@@ -1,7 +1,12 @@
+/**
+Class is intended to hold the cache table and all its statistics, the functions exposed are for usage in storing and extracting values from the cache table
+@class Cache
+@constructor
+**/
 function Cache () {
     'use strict';
     //===================================================================
-    //                 Variable Declarations and Initializations
+    //		       Variable Declarations and Initializations
     //===================================================================
     var CACHE = {},
     table = {},
@@ -16,24 +21,24 @@ function Cache () {
     cacheHits = 0,
     cache_obj = Object.create({"size":0,"data":{},"fetched":1,"last_fetched":null});
     
-    //=======================================================================
-    //         Method Declarations and Definitions
-    //======================================================================
+//=======================================================================
+//	       Method Declarations and Definitions
+//======================================================================
 /**
 This method is used to clear the cache table and empty it in one go.
 
 @method clearCache
 **/
     var clearCache = function () {
-	if(log){console.log("Cache Table Cleared")}
-	table = {},
-	queue = [],
-	callback_queue = {},
-	size = 0,
-	minFetched = 0,
-	cacheMisses = 0,
-	cacheHits = 0,
-	cache_obj = Object.create({"size":0,"data":{},"fetched":1,"last_fetched":null});
+	if(log){console.log("Cache Table Cleared");}
+	table = {};
+	queue = [];
+	callback_queue = {};
+	size = 0;
+	minFetched = 0;
+	cacheMisses = 0;
+	cacheHits = 0;
+	//cache_obj = Object.create({"size":0,"data":{},"fetched":1,"last_fetched":null});
     },
 /**
 Method is used for checking the cache and firing a ajax call if the data for that hash id is not found in the cache. It also has the task of updating the cache statistics and cacheObject statistics when the object is found in the cache. It also does the special function of queueing requests for a particular cache object if the id has already been sent via an AJAX request and once the data returns the callbacks are executed in the order they arrived
@@ -116,7 +121,7 @@ This method is used for calculating the approximate size of the cache object as 
 		break;
 	    case 'object': for(var c in o){
 		checkSize(o[c]);
-	    };
+	    }
 		break;
 	    default : sum += 1;
 		break;
@@ -320,7 +325,7 @@ This replacement algorithm reoves the biggest cache object to make way for many 
 	removeCacheObject(obj_id);
     },
     //===================================================================
-    //     This feature can be used when parts of data needs to be fetched like pagination
+    //	   This feature can be used when parts of data needs to be fetched like pagination
     //==================================================================
 /**
 The method is used for fetching the chunked cache object by checking for its existence and executing the callback when the data is returned to the function.
@@ -423,7 +428,7 @@ The method is used for adding the cache object into the table depending on the s
     };
 	
     //=====================================================================
-    //         Setting public variables and methods
+    //	       Setting public variables and methods
     //====================================================================
     CACHE.maxSize = maxCacheSize;
     

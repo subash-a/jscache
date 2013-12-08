@@ -1,0 +1,9 @@
+{
+  "name": "jscache",
+  "version": "1.0.0",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-yuidoc": "~0.5.0",
+    "grunt-contrib-jshint": "~0.7.2"
+  }
+}
