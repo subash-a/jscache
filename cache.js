@@ -211,7 +211,7 @@ Method is used for fetching the required data from the backend or a web service 
 		    callback_queue[id].map(function(f){
 			cacheHits ++;
 			updateCacheObjectFlags(id);
-			f.apply(this,obj)
+			f.call(this,obj);
 		    });
 		}
 	    }
@@ -322,19 +322,34 @@ This replacement algorithm reoves the biggest cache object to make way for many 
     //===================================================================
     //     This feature can be used when parts of data needs to be fetched like pagination
     //==================================================================
-    chunkData = function (urltemplate,keyarray,objectname,interval) {
+    getChunkedCacheObject = function(id,callback,options) {
+	if(table[id]) {
+	    return table[id];
+	}
+	else {
+	    if(!callback_queue[id]) {
+		chunkData(options.urltemplate,options.keyarray,id,options.interval,options.path,callback);
+		callback_queue[id] = [];
+	    }
+	    else {
+		callback_queue[id].push(callback);
+	    }
+	}
+    },
+    chunkData = function (urltemplate,keyarray,objectname,interval,path,callback) {
 	var template = urltemplate,
 	keys = keyarray,
 	obj_id = objectname,
 	fetchChunk = function (key) {
-	    var url = template+key,
+	    var url = template.replace("{value}",key),
 	    resCallback = function (data) {
-		addCacheChunkObject(obj_id,data);
+		var obj = addCacheChunkObject(obj_id,data,path);
+		callback(obj);
 	    };
 	    fetchCacheChunkObject(url,resCallback)
 	};
 	keys.map(fetchChunk)
-    };
+    },
 
     fetchCacheChunkObject = function (url,callback) {
 	var xhr = new XMLHttpRequest();
@@ -345,9 +360,10 @@ This replacement algorithm reoves the biggest cache object to make way for many 
 		callback(data);
 	    }
 	};
-    };
+	xhr.send();
+    },
 
-    addCacheChunkObject = function (id,data) {
+    addCacheChunkObject = function (id,data,path) {
 	if(!table[id]) {
 	    var cacheObject = {"size":0,"data":{},"fetched":1,"last_fetched":Date.parse(new Date())};
 	    cacheObject.data = data;
@@ -363,8 +379,9 @@ This replacement algorithm reoves the biggest cache object to make way for many 
 	    return cacheObject;
 	}
 	else {
-	    var object = table[id];
-	    object[0].push(data);
+	    var cacheObject = table[id];
+	    cacheObject.data[path] = cacheObject.data[path].concat(data[path]);
+	    return cacheObject;
 	}
     };
 	
@@ -380,7 +397,8 @@ This replacement algorithm reoves the biggest cache object to make way for many 
     CACHE.setCacheObject = setCacheObject;
     CACHE.getCacheSize = getCacheSize;
     CACHE.setMaximumCacheSize = setMaximumCacheSize;
-    
+    CACHE.getChunkedCacheObject = getChunkedCacheObject;
+
     return CACHE;
 }
  
