@@ -7,6 +7,7 @@ module.exports = function(grunt) {
 		eqeqeq:true,
 		curly:true,
 		smarttabs:true,
+		laxcomma:true,
 		ignores:['./app.js,./Gruntfile.js']
 	    }
 	},

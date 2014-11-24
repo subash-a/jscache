@@ -26,14 +26,14 @@
             "extension_for": [],
             "file": "cache.js",
             "line": 1,
-            "description": "Class is intended to hold the cache table and all its statistics, the functions exposed are for usage in storing and extracting values from the cache table",
+            "description": "Class is intended to hold the cache table and all its statistics, the functions\nexposed are for usage in storing and extracting values from the cache table",
             "is_constructor": 1
         }
     },
     "classitems": [
         {
             "file": "cache.js",
-            "line": 27,
+            "line": 33,
             "description": "This method is used to clear the cache table and empty it in one go.",
             "itemtype": "method",
             "name": "clearCache",
@@ -41,8 +41,8 @@
         },
         {
             "file": "cache.js",
-            "line": 43,
-            "description": "Method is used for checking the cache and firing a ajax call if the data for that hash id is not found in the cache. It also has the task of updating the cache statistics and cacheObject statistics when the object is found in the cache. It also does the special function of queueing requests for a particular cache object if the id has already been sent via an AJAX request and once the data returns the callbacks are executed in the order they arrived\n.",
+            "line": 54,
+            "description": "Method is used for checking the cache and firing a ajax call if the data for\nthat hash id is not found in the cache. It also has the task of updating the\ncache statistics and cacheObject statistics when the object is found in the\ncache. It also does the special function of queueing requests for a particular\ncache object if the id has already been sent via an AJAX request and once the\ndata returns the callbacks are executed in the order they arrived.",
             "itemtype": "method",
             "name": "checkCache",
             "params": [
@@ -53,7 +53,7 @@
                 },
                 {
                     "name": "callback",
-                    "description": "is the callback to be exected when the object data is available.",
+                    "description": "is the callback to be exected when the object data\nis available.",
                     "type": "Function"
                 }
             ],
@@ -61,8 +61,8 @@
         },
         {
             "file": "cache.js",
-            "line": 70,
-            "description": "This method is used for updating cache object flags or statistics so that when the objects are sent for an evaluation by a replacement algorithm their flag values decide whether they will be removed or retained in the cache.",
+            "line": 87,
+            "description": "This method is used for updating cache object flags or statistics so that when\nthe objects are sent for an evaluation by a replacement algorithm their flag\nvalues decide whether they will be removed or retained in the cache.",
             "itemtype": "method",
             "name": "updateCacheObjectFlags",
             "params": [
@@ -76,8 +76,8 @@
         },
         {
             "file": "cache.js",
-            "line": 81,
-            "description": "Method is used for fetching cache object and calls another function internally called checkCache which checks and executes the callback on the cacheObject",
+            "line": 100,
+            "description": "Method is used for fetching cache object and calls another function internally\ncalled checkCache which checks and executes the callback on the cacheObject",
             "itemtype": "method",
             "name": "getCacheObject",
             "params": [
@@ -95,8 +95,8 @@
         },
         {
             "file": "cache.js",
-            "line": 92,
-            "description": "The method is used primarily to set a cacheObject manually if one does not want to make a AJAX call via getObject. Must be used in emergency cases only.",
+            "line": 112,
+            "description": "The method is used primarily to set a cacheObject manually if one does not want\nto make a AJAX call via getObject. Must be used in emergency cases only.",
             "itemtype": "method",
             "name": "setCacheObject",
             "params": [
@@ -107,7 +107,7 @@
                 },
                 {
                     "name": "obj",
-                    "description": "is the cache object template which contains flags and data value set to a particular value.",
+                    "description": "is the cache object template which contains flags and data\nvalue set to a particular value.",
                     "type": "Object"
                 }
             ],
@@ -119,8 +119,8 @@
         },
         {
             "file": "cache.js",
-            "line": 105,
-            "description": "This method is used for calculating the approximate size of the cache object as a whole along with nseted object structure it returns the size in Bytes. It recursively calculates the size of a nested object.",
+            "line": 127,
+            "description": "This method is used for calculating the approximate size of the cache object as\na whole along with nseted object structure it returns the size in Bytes. It\nrecursively calculates the size of a nested object.",
             "itemtype": "method",
             "name": "getSize",
             "params": [
@@ -138,8 +138,8 @@
         },
         {
             "file": "cache.js",
-            "line": 135,
-            "description": "Function calculates the size of a given object by passing it to an other function called getSize. This methos is used in case of any pre processing to be doone on the object or parsing purposes",
+            "line": 159,
+            "description": "Function calculates the size of a given object by passing it to an other\nfunction called getSize. This methos is used in case of any pre processing to\nbe doone on the object or parsing purposes",
             "itemtype": "method",
             "name": "calculateSize",
             "params": [
@@ -157,27 +157,27 @@
         },
         {
             "file": "cache.js",
-            "line": 146,
+            "line": 172,
             "description": "Method returns the size of an individual cache object when passed to it by id.",
             "itemtype": "method",
             "name": "getCacheObjectSize",
             "params": [
                 {
                     "name": "id",
-                    "description": "is the hash id of the cach object to be used for size calculation",
+                    "description": "is the hash id of the cach object to be used for size\ncalculation",
                     "type": "String"
                 }
             ],
             "return": {
-                "description": "calculateSize function is used for calculating size of any object after pre processing.",
+                "description": "calculateSize function is used for calculating size of any\nobject after pre processing.",
                 "type": "Function"
             },
             "class": "Cache"
         },
         {
             "file": "cache.js",
-            "line": 156,
-            "description": "This method is used for returning the cacheSize of the overall cache when called. This maintains a size varaible which gets updated when any new object is added to the cache and when any object is removed from the cache",
+            "line": 184,
+            "description": "This method is used for returning the cacheSize of the overall cache when\ncalled. This maintains a size variable which gets updated when any new object\nis added to the cache and when any object is removed from the cache",
             "itemtype": "method",
             "name": "getCacheSize",
             "return": {
@@ -188,7 +188,7 @@
         },
         {
             "file": "cache.js",
-            "line": 165,
+            "line": 195,
             "description": "This method sets logging as true or false",
             "itemtype": "method",
             "name": "setLogging",
@@ -203,8 +203,8 @@
         },
         {
             "file": "cache.js",
-            "line": 174,
-            "description": "This method is used for fetching the cache statistics of number of items, minimum number of fetches done for an object, cache hits, cache misses and cache size.",
+            "line": 204,
+            "description": "This method is used for fetching the cache statistics of number of items,\nminimum number of fetches done for an object, cache hits, cache misses and\ncache size.",
             "itemtype": "method",
             "name": "getStats",
             "return": {
@@ -215,8 +215,8 @@
         },
         {
             "file": "cache.js",
-            "line": 183,
-            "description": "This method is used for setting the maximum cache size in bytes that can be used and when the cache size is about to exceed, one of the many algorithms comes into play to replace the cahce object based on some criteria.",
+            "line": 221,
+            "description": "This method is used for setting the maximum cache size in bytes that can be\nused and when the cache size is about to exceed, one of the many algorithms\ncomes into play to replace the cahce object based on some criteria.",
             "itemtype": "method",
             "name": "setMaximumCacheSize",
             "params": [
@@ -234,8 +234,8 @@
         },
         {
             "file": "cache.js",
-            "line": 198,
-            "description": "Method is used for fetching the required data from the backend or a web service using AJAX call and is then used for executing the callback passed to the cacheObject, it also executes the callbacks which have been queued after the ajax call was made and before it returned with the data.",
+            "line": 238,
+            "description": "Method is used for fetching the required data from the backend or a web\nservice using AJAX call and is then used for executing the callback passed to\nthe cacheObject, it also executes the callbacks which have been queued after\nthe ajax call was made and before it returned with the data.",
             "itemtype": "method",
             "name": "getObject",
             "params": [
@@ -246,7 +246,7 @@
                 },
                 {
                     "name": "callback",
-                    "description": "is a callback function which gets executed once data is available",
+                    "description": "is a callback function which gets executed once\ndata is available",
                     "type": "Function"
                 }
             ],
@@ -254,7 +254,7 @@
         },
         {
             "file": "cache.js",
-            "line": 226,
+            "line": 270,
             "description": "This method is used for removing a cacheObject based on the id passed to it.",
             "itemtype": "method",
             "name": "removeCacheObject",
@@ -269,8 +269,8 @@
         },
         {
             "file": "cache.js",
-            "line": 238,
-            "description": "Method is used for creating a template cache object and then adding data returned to it from the ajax call and then setting up its size and checks for Cahce memory overflow. If overflow then warning is given and then a particular algorithm is executed to balance the memory. After this balancing operation cacheObject is added to the cache and is returned as well.",
+            "line": 282,
+            "description": "Method is used for creating a template cache object and then adding data\nreturned to it from the ajax call and then setting up its size and checks for\nCahce memory overflow. If overflow then warning is given and then a particular\nalgorithm is executed to balance the memory. After this balancing operation\ncacheObject is added to the cache and is returned as well.",
             "itemtype": "method",
             "name": "addCacheObject",
             "params": [
@@ -281,26 +281,26 @@
                 },
                 {
                     "name": "data",
-                    "description": "this is the data that has been returned from the ajax call.",
+                    "description": "this is the data that has been returned from the ajax\ncall.",
                     "type": "Object"
                 }
             ],
             "return": {
-                "description": "cacheObject is the fully formed object that contains flag data and the ajax data.",
+                "description": "cacheObject is the fully formed object that contains flag\ndata and the ajax data.",
                 "type": "Object"
             },
             "class": "Cache"
         },
         {
             "file": "cache.js",
-            "line": 261,
-            "description": "This is a Object replacement algorithm that removes any object that has been fetched the least so that new objects can take its place and cache is made useful and efficient.",
+            "line": 317,
+            "description": "This is a Object replacement algorithm that removes any object that has been\nfetched the least so that new objects can take its place and cache is made\nuseful and efficient.",
             "itemtype": "method",
             "name": "removeLeastFetched",
             "params": [
                 {
                     "name": "o_size",
-                    "description": "is the size of the object that needs to be added to cache so that replacement of one or more cache objects can be carried out till the required size is freed in the cache",
+                    "description": "is the size of the object that needs to be added to\ncache so that replacement of one or more cache objects can be carried out till\nthe required size is freed in the cache",
                     "type": "Number"
                 }
             ],
@@ -308,14 +308,14 @@
         },
         {
             "file": "cache.js",
-            "line": 280,
-            "description": "This Cache Object replacement algorithm replaces objects by criterion as to which was the object that was fetched very long ago and has not been fetched again. All cache objects are updated with the latest fetch time and the oldest one is replaced.",
+            "line": 340,
+            "description": "This Cache Object replacement algorithm replaces objects by criterion as to\nwhich was the object that was fetched very long ago and has not been fetched\nagain. All cache objects are updated with the latest fetch time and the oldest\none is replaced.",
             "itemtype": "method",
             "name": "removeLeastUsed",
             "params": [
                 {
                     "name": "o_size",
-                    "description": "is the size of the object that needs to be added to the cache",
+                    "description": "is the size of the object that needs to be added to the\ncache",
                     "type": "Number"
                 }
             ],
@@ -323,14 +323,14 @@
         },
         {
             "file": "cache.js",
-            "line": 298,
-            "description": "This replacement algorithm reoves the biggest cache object to make way for many smaller objects, it needs to be used in conjunction with the least used algorithm fir best results",
+            "line": 362,
+            "description": "This replacement algorithm reoves the biggest cache object to make way for many\nsmaller objects, it needs to be used in conjunction with the least used\nalgorithm fir best results",
             "itemtype": "method",
             "name": "removeBiggest",
             "params": [
                 {
                     "name": "o_size",
-                    "description": "is the size of the object that needs to be added into the cache.",
+                    "description": "is the size of the object that needs to be added into\nthe cache.",
                     "type": "Number"
                 }
             ],
@@ -338,19 +338,19 @@
         },
         {
             "file": "cache.js",
-            "line": 330,
-            "description": "The method is used for fetching the chunked cache object by checking for its existence and executing the callback when the data is returned to the function.",
+            "line": 397,
+            "description": "The method is used for fetching the chunked cache object by checking for its\nexistence and executing the callback when the data is returned to the function.",
             "itemtype": "method",
             "name": "getChunkedCacheObject",
             "params": [
                 {
                     "name": "id",
-                    "description": "is the id used for storing the cache object, this may be different from the actual url that will be called.",
+                    "description": "is the id used for storing the cache object, this may be\ndifferent from the actual url that will be called.",
                     "type": "String"
                 },
                 {
                     "name": "callback",
-                    "description": "is the function that is executed when the cacheobject returns.",
+                    "description": "is the function that is executed when the\ncacheobject returns.",
                     "type": "Function"
                 },
                 {
@@ -360,22 +360,22 @@
                     "props": [
                         {
                             "name": "urltemplate",
-                            "description": "is the url template that has a value tag that gets replaced with the keys",
+                            "description": "is the url template that has a value tag\nthat gets replaced with the keys",
                             "type": "String"
                         },
                         {
                             "name": "keyarray",
-                            "description": "is the array of keys that need to be replaced in the template when making the url call",
+                            "description": "is the array of keys that need to be replaced\nin the template when making the url call",
                             "type": "Array"
                         },
                         {
                             "name": "interval",
-                            "description": "is the interval after which the next call needs to be made",
+                            "description": "is the interval after which the next call\nneeds to be made",
                             "type": "Number"
                         },
                         {
                             "name": "path",
-                            "description": "is the path which needs to be used for mxing the incoming data with existing data",
+                            "description": "is the path which needs to be used for mxing the\nincoming data with existing data",
                             "type": "String"
                         }
                     ]
@@ -385,39 +385,39 @@
         },
         {
             "file": "cache.js",
-            "line": 357,
-            "description": "The function is intended for fetching and adding the chunked cache object into the cache table and also executes the callback given upon addition of object in the table",
+            "line": 436,
+            "description": "The function is intended for fetching and adding the chunked cache object into\nthe cache table and also executes the callback given upon addition of object\nin the table",
             "itemtype": "method",
             "name": "chunkData",
             "params": [
                 {
                     "name": "urltemplate",
-                    "description": "is the string template having value surrounded by braces which is replaced by the keys when the url call is being made",
+                    "description": "is the string template having value surrounded by\nbraces which is replaced by the keys when the url call is being made",
                     "type": "String"
                 },
                 {
                     "name": "is",
-                    "description": "the array of keys that get attached to the urltemplate when the xhr is being made",
+                    "description": "the array of keys that get attached to the urltemplate when\nthe xhr is being made",
                     "type": "Array"
                 },
                 {
                     "name": "objectname",
-                    "description": "is the string id for the cache table object that is going to be stored",
+                    "description": "is the string id for the cache table object that is\ngoing to be stored",
                     "type": "String"
                 },
                 {
                     "name": "interval",
-                    "description": "is the time interval after which the next xhr call needs to be made",
+                    "description": "is the time interval after which the next xhr call\nneeds to be made",
                     "type": "Number"
                 },
                 {
                     "name": "path",
-                    "description": "is the string path for the object where the new objects needs to be added to the existing cache object",
+                    "description": "is the string path for the object where the new objects\nneeds to be added to the existing cache object",
                     "type": "String"
                 },
                 {
                     "name": "callback",
-                    "description": "is the callback to be executed when the cacheobject gets added to the cache table",
+                    "description": "is the callback to be executed when the cacheobject\ngets added to the cache table",
                     "type": "Function"
                 }
             ],
@@ -425,8 +425,8 @@
         },
         {
             "file": "cache.js",
-            "line": 382,
-            "description": "This method makes the xhr call and upon receiving of data executes a callback that involves adding the cache object to the cache table after calculating the size of the object and optionaly executing a replacement algorithm",
+            "line": 469,
+            "description": "This method makes the xhr call and upon receiving of data executes a callback\nthat involves adding the cache object to the cache table after calculating the\nsize of the object and optionaly executing a replacement algorithm",
             "itemtype": "method",
             "name": "fetchCacheChunkObject",
             "params": [
@@ -437,7 +437,7 @@
                 },
                 {
                     "name": "callback",
-                    "description": "which is supposed to be executed after getting the object",
+                    "description": "which is supposed to be executed after getting the\nobject",
                     "type": "Function"
                 }
             ],
@@ -445,8 +445,8 @@
         },
         {
             "file": "cache.js",
-            "line": 400,
-            "description": "The method is used for adding the cache object into the table depending on the size and other conditions where the object might exceed the max cache size set by user",
+            "line": 490,
+            "description": "The method is used for adding the cache object into the table depending on the\nsize and other conditions where the object might exceed the max cache size set\nby user",
             "itemtype": "method",
             "name": "addCacheChunkObject",
             "params": [
@@ -462,7 +462,7 @@
                 },
                 {
                     "name": "path",
-                    "description": "is the object key which is where the new data gets added after successive calls are made to the chunked object",
+                    "description": "is the object key which is where the new data gets added\nafter successive calls are made to the chunked object",
                     "type": "String"
                 }
             ],
